@@ -1,3 +1,4 @@
+from http.client import LineTooLong
 import numpy as np
 import chainer
 from chainer import cuda, Function, gradient_check, Variable, optimizers, serializers, utils
@@ -119,11 +120,25 @@ class Net(ChainList):
         self.endi = 0
     def __call__(self, x, test=False, starti=0, endi=None):
         h = x
+        # import pdb; pdb.set_trace()
+        count = 0
         for link in self[starti:endi]:
-            if len(inspect.getargspec(link.__call__)[0]) == 2:
+            # # t = inspect.getfullargspec(link.__call__)
+            # # if len(inspect.getfullargspec(link.__call__)[0]) == 2:
+            #     print(link.__call__.__code__.co_argcount)
+
+            # h = link(h)
+            # count += 1
+            # # else:
+            # #     h = link(h,test)
+            t = link.__call__.__code__.co_argcount
+            # print(t)
+            if link.__call__.__code__.co_argcount <= 2:
                 h = link(h)
             else:
-                h = link(h,test)
+                h = link(h, test)
+            # print(link)
+            print(h.shape)
         self.h = h
         return h
     def train(self, x, t, starti=0, endi=None):

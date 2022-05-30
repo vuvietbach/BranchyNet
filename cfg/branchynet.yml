@@ -1,0 +1,17 @@
+model:
+  train:
+    loss:
+      name: cross_entropy
+      model_weight:
+      - 1.0
+      - 0.6
+      - 0.3
+    keep_metric:
+      name: entropy
+      threshold: 0.5
+    forward_main: True
+    num_epoch: 10
+    val_frequency: 5
+    
+  log:
+    name:

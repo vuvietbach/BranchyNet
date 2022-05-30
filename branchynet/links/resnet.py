@@ -55,15 +55,20 @@ class ResBlock(chainer.Chain):
         return new
     def __call__(self, x, test):
         train = not test
-        h = F.relu(self.bn1(self.conv1(x), test=not train))
-        h = self.bn2(self.conv2(h), test=not train)
+        with chainer.using_config('test', not train):
+            h = F.relu(self.bn1(self.conv1(x)))
+            h = self.bn2(self.conv2(h))
+
+        # h = F.relu(self.bn1(self.conv1(x), test=not train))
+        # h = self.bn2(self.conv2(h), test=not train)
         if x.data.shape != h.data.shape:
             xp = chainer.cuda.get_array_module(x.data)
             n, c, hh, ww = x.data.shape
             pad_c = h.data.shape[1] - c
             p = xp.zeros((n, pad_c, hh, ww), dtype=xp.float32)
-            p = chainer.Variable(p, volatile=not train)
-            x = F.concat((p, x))
+            p = chainer.Variable(p)
+            with chainer.no_backprop_mode():
+                x = F.concat((p, x))
             if x.data.shape[2:] != h.data.shape[2:]:
                 x = F.average_pooling_2d(x, 1, 2)
         return F.relu(h + x)

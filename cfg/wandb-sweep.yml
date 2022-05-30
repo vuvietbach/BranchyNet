@@ -1,0 +1,16 @@
+program: src/train.py
+command:
+  - /mnt/disk1/anaconda3/envs/branchynet/bin/python
+  - ${program}
+  - ${args}
+method: grid
+metric:
+  name: val_acc
+  goal: maximize
+parameters:
+  keep_metric:
+    values: ['entropy', 'uncertainty']
+  threshold: 
+    values: [1, 5, 10]
+  loss:
+    values: ['cross_entropy', 'uncertainty']

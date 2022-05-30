@@ -1,7 +1,5 @@
-datasets/data
-_*.ipynb
-.ipynb_checkpoints
-*.pyc
-_*
-libmr.so
-result
+*.npz
+*.log
+branchynet/
+wandb/
+workdir/

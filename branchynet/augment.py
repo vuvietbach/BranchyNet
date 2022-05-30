@@ -3,11 +3,11 @@ import argparse
 import six
 import numpy as np
 from skimage.io import imsave
-from scipy.misc import imresize
+# from scipy.misc import imresize
 import time
 from multiprocessing import Process
 from multiprocessing import Queue, Pool
-
+import cv2
 class Transform(object):
 
     cropping_size = 24
@@ -32,8 +32,8 @@ class Transform(object):
             for offset_x in six.moves.range(0, 4 + 2, 2):
                 im = img[offset_y:offset_y + self.scaling_size,
                          offset_x:offset_x + self.scaling_size]
-                im = imresize(im, (self.cropping_size, self.cropping_size),
-                              'nearest')
+                im = cv2.resize(im, (self.cropping_size, self.cropping_size),
+                              cv2.INTER_NEAREST)
                 # global contrast normalization
                 im = im.astype(np.float)
                 im -= im.reshape(-1, 3).mean(axis=0)

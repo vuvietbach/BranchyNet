@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+import sys
+sys.path.append('/mnt/disk1/hungvv/vuvietbach/branchynet/branchynet')
 import utils
 
 from chainer import Variable

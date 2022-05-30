@@ -1,0 +1,1 @@
+wandb sweep cfg/wandb-sweep.yml
